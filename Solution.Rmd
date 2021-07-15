@@ -1,0 +1,71 @@
+---
+title: "Visualisation et analyse de données de biologie végétale"
+author: "Océane Cassan"
+date: "09/01/2021"
+output::
+  html_document:
+    theme: united
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      fig.width = 12, 
+                      fig.height = 8)
+library(ggplot2)
+library(knitr)
+library(ggpubr)
+```
+
+# Contexte
+
+Ce document est une proposition de solution pour la session pratique d'introduction à la rédaction de rapports d'analyse sous Rmarkdown. 
+
+Les données analysées sont issues d'un publication intitulée "Fluctuating, warm temperatures decrease the effect of a key floral repressor on flowering time in Arabidopsis thaliana" de 2015 : <https://nph.onlinelibrary.wiley.com/doi/10.1111/nph.13799>.
+
+# Import des données
+
+On dispose de données liées à la floraison et aux phénotypes des parties aériennes de plantes de différents génotypes.
+Les fichier csv des données biologiques à étudier est importé et rapidement inspecté via la fonction ```summary``` :
+
+```{r import}
+data <- read.csv("burghardt_et_al_2015_expt1.csv")
+dim(data)
+kable(head(data))
+kable(summary(data))
+```
+# Visualisation
+
+On affiche le nombre de jours jusqu'à floraison suivant les différents génotypes, durée de jours, et la température de culture :
+
+```{r visu, warning=FALSE, message=FALSE}
+data$temperature <- factor(data$temperature)
+ggplot(data, aes(x = factor(temperature), 
+                 y = days.to.flower, 
+                 color = genotype )) + 
+  geom_jitter(color = "black")+ 
+  geom_boxplot(aes(fill = genotype), alpha = 0.3) +
+  facet_grid(day.length~genotype) + 
+  xlab("Temperature")
+```
+
+On constate qu'une température plus élevée aura tendance à diminuer le temps nécessaire à la floraison.
+La durée du jour est également influente, car on voit que des jours longs feront fleurir plus vite les plantes.
+
+# Tests statistiques sur les visualisations
+
+Il s'agit ici de reproduire le même graphe mais en se demandant si les durées jusqu'à floraison sont significativement impactées par la température. La fonction ```stat_compare_means``` permet de rajouter un test de comparaison de moyennes (ici non paramétrqie, le wilcox.test)
+
+
+```{r pvalues, warning=F, message=TRUE}
+
+comparisons <- list(c("12", "22"))
+ggplot(data, aes(x = temperature, 
+                 y = days.to.flower, 
+                 color = genotype )) + 
+  geom_jitter(color = "black")+ 
+  geom_boxplot(aes(fill = genotype), alpha = 0.3) +
+  facet_grid(day.length~genotype) + 
+  xlab("Temperature") + 
+  stat_compare_means(comparisons = comparisons, label = "p.signif")
+```
+
