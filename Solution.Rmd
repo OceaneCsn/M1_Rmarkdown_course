@@ -19,7 +19,6 @@ library(ggpubr)
 # Contexte
 
 Ce document est une proposition de solution pour la session pratique d'introduction à la rédaction de rapports d'analyse sous Rmarkdown. 
-
 Les données analysées sont issues d'un publication intitulée "Fluctuating, warm temperatures decrease the effect of a key floral repressor on flowering time in Arabidopsis thaliana" de 2015 : <https://nph.onlinelibrary.wiley.com/doi/10.1111/nph.13799>.
 
 # Import des données

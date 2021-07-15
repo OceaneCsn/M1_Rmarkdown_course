@@ -3,7 +3,7 @@
     "path": "D:/These/M1_Rmarkdown_course/README.md",
     "project_path": "README.md",
     "type": "markdown",
-    "hash": "0",
+    "hash": "3148162642",
     "contents": "",
     "dirty": false,
     "created": 1626357567234.0,
@@ -13,7 +13,7 @@
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "3,403",
+        "cursorPosition": "5,0",
         "scrollLine": "0",
         "rmdVisualMode": "false",
         "rmdVisualModeLocation": "2:0",
@@ -21,11 +21,11 @@
         "docOutlineVisible": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1626357678,
+    "lastKnownWriteTime": 1626358244,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1626357678753,
+    "last_content_update": 1626358244602,
     "read_only": false,
     "read_only_alternatives": []
 }
