@@ -4,7 +4,3 @@
 "0","library(ggplot2)"
 "0","library(knitr)"
 "0","library(ggpubr)"
-"2","Registered S3 method overwritten by 'data.table':
-  method           from
-  print.data.table     
-"

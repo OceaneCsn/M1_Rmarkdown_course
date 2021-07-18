@@ -42,7 +42,7 @@ ggplot(data, aes(x = factor(temperature),
                  y = days.to.flower, 
                  color = genotype )) + 
   geom_jitter(color = "black")+ 
-  geom_boxplot(aes(fill = genotype), alpha = 0.3) +
+  geom_boxplot(aes(fill = genotype), alpha = 0.3, size = 1) +
   facet_grid(day.length~genotype) + 
   xlab("Temperature")
 ```
@@ -62,7 +62,7 @@ ggplot(data, aes(x = temperature,
                  y = days.to.flower, 
                  color = genotype )) + 
   geom_jitter(color = "black")+ 
-  geom_boxplot(aes(fill = genotype), alpha = 0.3) +
+  geom_boxplot(aes(fill = genotype), alpha = 0.3, size = 1) +
   facet_grid(day.length~genotype) + 
   xlab("Temperature") + 
   stat_compare_means(comparisons = comparisons, label = "p.signif")
