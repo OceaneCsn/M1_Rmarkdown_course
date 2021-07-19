@@ -1,10 +1,12 @@
 ---
 title: "Visualisation et analyse de données de biologie végétale"
-author: "Océane Cassan"
+author: "Océane Cassan - oceane.cassan@cnrs.fr"
 date: "09/01/2021"
-output::
+output:
   html_document:
     theme: united
+    highlight: breezedark
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
@@ -12,8 +14,9 @@ knitr::opts_chunk$set(echo = TRUE,
                       fig.width = 12, 
                       fig.height = 8)
 library(ggplot2)
-library(knitr)
 library(ggpubr)
+library(equatiomatic)
+library(papeR)
 ```
 
 # Contexte
@@ -29,10 +32,11 @@ Les fichier csv des données biologiques à étudier est importé et rapidement 
 ```{r import}
 data <- read.csv("burghardt_et_al_2015_expt1.csv")
 dim(data)
-kable(head(data))
-kable(summary(data))
+head(data)
 ```
-# Visualisation
+# Visualisation {.tabset .tabset-fade}
+
+## Visualisation simple 
 
 On affiche le nombre de jours jusqu'à floraison suivant les différents génotypes, durée de jours, et la température de culture :
 
@@ -50,7 +54,7 @@ ggplot(data, aes(x = factor(temperature),
 On constate qu'une température plus élevée aura tendance à diminuer le temps nécessaire à la floraison.
 La durée du jour est également influente, car on voit que des jours longs feront fleurir plus vite les plantes.
 
-# Tests statistiques sur les visualisations
+## Tests statistiques sur les visualisations
 
 Il s'agit ici de reproduire le même graphe mais en se demandant si les durées jusqu'à floraison sont significativement impactées par la température. La fonction ```stat_compare_means``` permet de rajouter un test de comparaison de moyennes (ici non paramétrqie, le wilcox.test)
 
@@ -66,5 +70,21 @@ ggplot(data, aes(x = temperature,
   facet_grid(day.length~genotype) + 
   xlab("Temperature") + 
   stat_compare_means(comparisons = comparisons, label = "p.signif")
+```
+
+# Régression linéaire
+
+
+On va expliquer le nombre de feuilles d'une plante au moyen du temps qu'elle a mis a fleurir, et de la longueur des jours
+
+```{r message=FALSE, warning=FALSE}
+ggplot(data, aes(x = days.to.flower, 
+                 y = rosette.leaf.num, 
+                 color = factor(day.length))) + geom_point()
+
+
+lm <- lm(data = data, rosette.leaf.num~days.to.flower*factor(day.length))
+extract_eq(lm)
+prettify(summary(lm))
 ```
 
