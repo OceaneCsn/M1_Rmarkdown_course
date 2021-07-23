@@ -233,7 +233,7 @@ La syntaxe de Rmarkdown dont vous allez avoir besoin par la suite est dans cette
 ## Partie pratique
 
 Maintenant, à vous de générer un rapport d'analyses.
-
+L'idée est de générer un rapport identique à [celui- ci](https://oceanecsn.github.io/M1_Rmarkdown_course/)
 
 Tout d'abord, nous aurons besoin de certains packages. 
 Assurez-vous de leur installation avant de commencer. Pou cela, dans la console R, exécutez la commande suivante qui fera les installations des packages manquants uniquement :
@@ -270,9 +270,9 @@ install.packages(setdiff(packages, rownames(installed.packages())))
 ### Initialisation de l'environnement de travail.
 
 + Ouvrez RStudio et créez un nouveau projet (File/New Project.../New Directory).
-Choisissez un emplacement et créez votre projet. A la racine du projet, créez un folder "data", dans lequel vous pouvez [télécharger les données](https://raw.githubusercontent.com/OceaneCsn/M1_Rmarkdown_course/master/data/burghardt_et_al_2015_expt1.csv) que nous allons utiliser aujourd'hui pour illustrer les fonctionnalités de Rmarkdown.
+Choisissez un emplacement et créez votre projet. A la racine du projet, créez un folder "data", dans lequel [télécharger les données](https://raw.githubusercontent.com/OceaneCsn/M1_Rmarkdown_course/master/data/burghardt_et_al_2015_expt1.csv) que nous allons utiliser aujourd'hui pour illustrer les fonctionnalités de Rmarkdown.
 
-+ Créez un nouveau document Rmarkdown qui sera votre script de TP, via le menu File/New file/R Markdown (acceptez les éventuelles mises à jour). Laissez l'option HTML par défaut. Comme vous le constatez, RStudio propose déjà un petit template d'exemple fonctionnel de Rmarkdown. Vous pouvez le sauvegarder et le compiler avec le bouton knitr en haut de panel du script. Inspectez le résultat obtenu, ainsi que le code l'ayant généré.
++ Créez un nouveau document Rmarkdown qui sera votre script de TP, via le menu File/New file/R Markdown (acceptez les éventuelles mises à jour). Laissez l'option HTML par défaut. Comme vous le constatez, RStudio propose déjà un petit template d'exemple fonctionnel de Rmarkdown. Vous pouvez le sauvegarder et le compiler avec le bouton Knit en haut de panel du script. Inspectez le résultat obtenu, ainsi que le code l'ayant généré.
 
 + Personnalisez si nécessaire le template dans l'entête YAML (auteur, titre, date...). 
 
@@ -398,11 +398,13 @@ Dans une nouvelle section, expliquez l’objectif et affichez la relation entre 
 
 
 ```{r, eval=FALSE}
-ggplot(data, aes(x = days.to.flower, 
+ggplotly(ggplot(data, aes(x = days.to.flower, 
                  y = rosette.leaf.num, 
-                 color = day.length)) + geom_point()
+                 color = day.length)) + geom_point())
 ```
 
+
+Vous remarqurez ici que la fonction `ggplotly` permet de rendre interactif le graphe ggplot.
 
 On réalise la régression au moyen de la fonction `lm`, puis on extrait et on affiche en syntaxe latex de l'équation de ce modèle linéaire : 
 
@@ -473,6 +475,9 @@ output:
       after_body: footer.html
 ---
 ```
+
+A la fin de ces guidelines, vous devirez avoir un document très proche de la solution!
+
 
 
 
