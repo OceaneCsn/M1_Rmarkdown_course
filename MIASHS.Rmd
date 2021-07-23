@@ -38,7 +38,8 @@ knitr::opts_chunk$set(echo = TRUE)
 </style>
 
 
-# RStudio <img src="./Images/RStudio.png" align="right" alt="" width="160" />
+# RStudio <img src="./Images/RStudio.png" align="right" alt="" width="160" /> {.tabset .tabset-fade}
+
 
 ---
 
@@ -206,6 +207,8 @@ date: "8/15/2020"
 output:
   html_document:
     theme: united
+    number_sections: true
+    highlight: breezedark
 ---
 ```
 
@@ -234,7 +237,7 @@ Tout d'abord, nous aurons besoin de certains packages.
 Assurez-vous de leur installation avant de commencer. Pou cela, dans la console R, exécutez la commande suivante qui fera les installations des packages manquants uniquement :
 
 ```{r, eval=FALSE}
-packages <- c("ggplot2", "ggpubr", "gglm", "equatiomatic", "papeR")
+packages <- c("ggplot2", "ggpubr", "gglm", "equatiomatic", "papeR", "knitr")
 install.packages(setdiff(packages, rownames(installed.packages())))  
 ``` 
 
@@ -251,6 +254,8 @@ install.packages(setdiff(packages, rownames(installed.packages())))
   **papeR** : formatte des résultats de summary de modèles de régression
   
   **gglm** : graphes des résidus d'un modèle de régression
+  
+  **knitr** : outils pour la compilation de documents Rmd
 
   </div>
 </div>
@@ -258,19 +263,18 @@ install.packages(setdiff(packages, rownames(installed.packages())))
 
 
 
-### **Initialisation de l'environnement de travail**.
+### Initialisation de l'environnement de travail.
 
 + Ouvrez RStudio et créez un nouveau projet (File/New Project.../New Directory).
 Choisissez un emplacement et créez votre projet. A la racine du projet, créez un folder "data", dans lequel vous pouvez télécharger les données que nous allons utiliser aujourd'hui pour illustrer les fonctionalités de Rmarkdown : "https://raw.githubusercontent.com/OceaneCsn/M1_Rmarkdown_course/master/data/burghardt_et_al_2015_expt1.csv".
 
-+ Créez un nouveau document Rmarkdown via le menu File/New file/R Markdown (acceptez les éventuelles mises à jour). Laissez l'option HTML par défaut.
++ Créez un nouveau document Rmarkdown qui sera votre script de TP, via le menu File/New file/R Markdown (acceptez les éventuelles mises à jour). Laissez l'option HTML par défaut. Comme vous le constatez, RStudio propose déjà un petit template d'exemple fonctionnel de Rmarkdown. Vous pouvez déjà le sauvegarder et le compiler avec le bouton knitr en haut de panel du script. Inspectez le résultat ainsi que le code l'ayant généré.
 
-+ Personnalisez le template dnas l'entête YAML (auteur, titre...). Vous pouvez déjà le sauvegarder et les compiler avec le bouton knitr en haut de panel du script. Inspectez le résultat ainsi que le code l'ayant généré.
++ Personnalisez si nécessaire le template dnas l'entête YAML (auteur, titre, date...). 
 
++ Le premier chunk de setup doit être conservé. Rajoutez-y l'import des packages que nous allons utiliser. Il doit donc maintenant contenir : 
 
-+ Le premier chunk de setup doit être conservé. Rajoutez-y l'import des packages que nous allons utiliser. Il doit donc contenir : 
-
-```{r}
+```{r, eval=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
 library(ggpubr)
@@ -279,12 +283,14 @@ library(papeR)
 library(gglm)
 ```
 
-Nous continuerons de le modifier plus tard dans l'énoncé. La suite du template peut être supprimée.
+Nous continuerons de le modifier plus tard dans l'énoncé. Exécutez ce chunk avec la petite flèche verte en haut à droite, ou avec Ctrl+Shift+Enter.
 
-Au cours des étapes suivantes, utilisez régulièrement knitr pour compiler et visualiser le rendu du document.
+ La suite du template peut être supprimée.
+
+Au cours des étapes suivantes, utilisez régulièrement knitr pour compiler et visualiser le rendu du document. Vous pouvez également prendre l'habitude de copier le texte des questions de l'énoncé dans les parties markdown de votre rapport pour re-contextualiser le code contenu des chunks.
 
 
-1. **Donner le contexte et importer les données**
+### Donner le contexte et importer les données
 
 Créez une première section nommée "Contexte" (`# Contexte`) et rappelez l'objectif du document (vous familiariser avec Rmarkdown). Vous pouvez également parler des données que nous allons utiliser comme base de notre démonstration : Les données analysées sont issues d'un [publication](https://nph.onlinelibrary.wiley.com/doi/10.1111/nph.13799) intitulée "Fluctuating, warm temperatures decrease the effect of a key floral repressor on flowering time in Arabidopsis thaliana" de 2015.
 
@@ -293,131 +299,127 @@ Dans ces données, plusieurs génotypes d'Arabidopsis thaliana, une plante modè
 Dans le premier chunk de votre document ( Ctrl + Alt + I, ou sous OS X: Cmd + Option + I), vous pouvez loader le jeu de données ainsi :
 
 ```{r eval=FALSE}
-library(dplyr)
-data(starwars)
+data <- read.csv("data/burghardt_et_al_2015_expt1.csv")
+dim(data)
+head(data)
 ```
+
+La fonction `dim` donne les dimensions du dataframe, et `head` donne un perçu de ses premières lignes.
 
 Exécutez un chunk avec la petite flèche verte en haut à droite, ou avec Ctrl+Shift+Enter.
-Après exécution, un objet starwars est apparu dans votre environnement RStudio. 
-
-2. Dans une nouvelle section et un nouveau chunk, affichez un aperçu du dataframe starwars : ``` head(starwars)```. Le formatage de base peut être amélioré avec la fonction ``` knitr::kable(head(starwars))```.
+Après exécution, un objet data est apparu dans votre environnement RStudio. Vous pouvez l'inspecter avec la commande `View(data)` dans la console.
 
 
-3. Créez une section visualisation. Nous allons ici représenter la masse des personnages en fonction de leur taille. Voici le code à utiliser, utilisant la librarie ggplot2 :
+
+### Visualisation
+
+Créez une section Visualisation.
+
+Créez ensuite une sous-section `## Simple visualisation`. 
+
+Nous allons ici représenter le nombre de jours jusqu'à floraison pour les différents génotypes, durée de jours (qui peuvent être contrôlés dans des chambres artificielles), et la température de culture. Voici le code à utiliser pour réaliser le graphique, utilisant la librairie ggplot2 :
 
 ```{r, eval=FALSE}
-library(ggplot2)
-ggplot(starwars, aes(x = height, y = mass, label = name)) + 
-  geom_text(size = 3, alpha = 0.5)+ 
-  geom_point(size = 2, aes(color = name)) + theme(legend.position = "none") + 
-  ggtitle("Masse en fonction de la taille des personnages de Star Wars")
+data$temperature <- factor(data$temperature)
+data$day.length = factor(data$day.length)
+
+ggplot(data, aes(x = factor(temperature), 
+                 y = days.to.flower, 
+                 color = genotype )) + 
+  geom_jitter(color = "black")+ 
+  geom_boxplot(aes(fill = genotype), alpha = 0.3, size = 1) +
+  facet_grid(day.length~genotype) + 
+  xlab("Temperature")
+```
+
+Exécutez le chunk, et compilez le document avec knitr.
+
+
+### Changement de la taille d'une image
+
+
+L'image est de taille assez petite. De manière globale à tout le document, demandez des images de hauteur 8 et de largeur 12. Pour cela, ajoutez des paramètres `fig.width` et `fig.height` à ```knitr::opts_chunk$set(echo = TRUE)``` dans le premier chunk.
+
+Recompliez le document pour vérifier que le changement de taille a bien eu lieu.
+
+
+### Ajout des tests statistiques sur la visualisation
+
+On constate qu'une température plus élevée aura tendance à diminuer le temps nécessaire à la floraison. Il s'agit ici de reproduire le même graphe mais en se demandant si les durées jusqu'à floraison sont significativement impactées par la température. La fonction ```stat_compare_means``` du package ```ggpubr``` permet de rajouter un test de comparaison de moyennes (ici non paramétrique, le wilcox.test)
+
+Créez une sous-section `## Visualisation avec tests statistiques`
+
+Ajoutez en dessous un nouveau chunk contenant : 
+
+```{r, eval=FALSE}
+comparisons <- list(c("12", "22"))
+ggplot(data, aes(x = temperature, 
+                 y = days.to.flower, 
+                 color = genotype )) + 
+  geom_jitter(color = "black")+ 
+  geom_boxplot(aes(fill = genotype), alpha = 0.3, size = 1) +
+  facet_grid(day.length~genotype) + 
+  xlab("Temperature") + 
+  stat_compare_means(comparisons = comparisons, label = "p.signif")
 ```
 
 
+### Utiliser des onglets pour organiser les sous-sections
 
-4. L'image est de taille assez petite. De manière générique à tout le document, demandez des images de hauteur 9 et de largeur 9. Pour cela, ajoutez des paramètres à ```knitr::opts_chunk$set(echo = TRUE)``` en début de document.
+Nous allons maintenant faire comme dans ce sujet de TP et positionner chacune des sous-sections dans deux onglets. Pour cela, il suffit de spécifier des options à la section supérieure `# Visualisation`, qui devient `# Visualisation {.tabset .tabset-fade}`
 
-5. Les données manquantes pour certains personnages génèrent des warnings lors de la génération du graphique. Pour qu'ils n'apparaissent pas dans le document, ajoutez un paramètre au chunk spécifiant de ne pas rapporter les warnings.
+Compilez et inspectez le résultat.
 
-6. Vous devriez remarquer un clair outlier. En dehors du chunk, Ecrivez son nom en gras, et incluez sa photo comme indiqué dans la documentation de la syntaxe markdown.
-Si vous utilisez un chemain relatif, l'image doit être dans le même folder que votre document .Rmd. Sinon, vous pouvez utiliser un chemain absolu ou une url. Nous allons représenter de nouveau les données en retirant l'outlier avec le code suivant :
+### Régression
 
-```{r, eval=FALSE}
-library(stringr)
-starwars_filtered <- starwars[!str_detect(starwars$name, "Jabba"),]
 
-ggplot(starwars_filtered, aes(x = height, y = mass, label = name)) + 
-  geom_text(size = 4, alpha = 0.5)+ 
-  geom_point(size = 3, aes(color = sex)) +
-  ggtitle("Masse en fonction du poids des personnages de Star Wars") + 
-  geom_smooth() + scale_color_brewer(palette = "Set2") 
-```
+On va expliquer le nombre de feuilles d'une plante au moyen du temps qu'elle a mis a fleurir, et de la longueur des jours lors de la culture.
+Dans une nouvelle section, expliquez l’objectif et affichez la relation entre le nombre de feuilles et le temps jusqu'à floraison. On distingue les observations réalisées en jours courts ou en jours longs par la couleur:
 
-Ici, la couleur des points correspond au genre des personnages, et une interpolation a été ajoutée.
-
-7. Tous les personnages ne se sont pas rencontrés et ne sont pas apparus dans les mêmes films. Nous proposons ici de construire un réseau de co-occurrence dans lequel les personnages (noeuds du réseau), sont connectés par une arête si ils apparaissent dans au moins MIN_SHARED_FILMS films en commun (2 par défaut, mais vous pouvez le faire varier pour explorer un peu).
 
 ```{r, eval=FALSE}
-# creation des paires de personnages
-pairs <- data.frame(t(combn(starwars$name, m = 2)))
-
-# fonction qui donne le nombre de films en commun pour deux personnages
-get_common <- function(pair){
-  c1 <- strsplit(pair,'+', fixed = T)[[1]][1]
-  c2 <- strsplit(pair,'+', fixed = T)[[1]][2]
-  return(length(intersect(starwars[starwars$name == c1,]$films[[1]],
-                          starwars[starwars$name == c2,]$films[[1]])))
-}
-
-pairs[, "co_oc"] <- sapply(paste0(pairs[,1], '+',  pairs[,2]),  
-                           FUN = get_common)
-# La distribution des nombres de films en commun pour toutes les paires de personnages :
-table(pairs$co_oc)
-
-library(visNetwork)
-
-MIN_SHARED_FILMS <- 2
-
-# construction du dataframe des aretes du reseau
-edges <- pairs[pairs$co_oc >= MIN_SHARED_FILMS, ]
-net <- igraph::graph_from_data_frame(na.omit(edges), vertices = starwars, directed = FALSE)
-data <- toVisNetworkData(net)
-data$edges$value <- data$edges$co_oc
-data$edges$label <- data$edges$co_oc
-
-# visualisation
-visNetwork(data$nodes, data$edges) %>%
-  visEdges(smooth = FALSE, color = "grey", 
-           scaling = list(min = 10, max = 100)) %>%
-    visPhysics(
-      solver = "forceAtlas2Based",
-      timestep = 1,
-      minVelocity = 12,
-      maxVelocity = 9
-    ) %>%
-  visNodes(borderWidth = 1.5, size = 100, font = list("size" = 200, background = "white"), 
-           color = list("background" = "black", "border" = "orange"))
-
-# Affichage des personnages les plus connectés
-data$nodes$degree <- igraph::degree(net)
-plotly::ggplotly(ggplot(data$nodes, aes(x = degree, y = id)) + 
-                   geom_point(aes(color = degree, size = degree)) +
-                   ggtitle(paste("Nombre de personnages qui partagent au moins ",MIN_SHARED_FILMS," films"))+ 
-                   scale_color_gradient(high = "orange", low = "black")) 
+ggplot(data, aes(x = days.to.flower, 
+                 y = rosette.leaf.num, 
+                 color = day.length)) + geom_point()
 ```
 
 
-Les deux graphiques de cet exemple sont interactifs (vous pouvez déplacer le réseau et ses noeuds, ou survoler les points du second plot), un des avantages du format html par rapport au format pdf.
+On réalise la régression au moyen de la fonction `lm`, puis on extrait et on affiche en syntaxe latex de l'équation de ce modèle linéaire : 
 
-Expliquez ces visualisations. Qui sont les personnages qui se retrouvent dans le plus de films et/ou ont rencontré le plus d'autres personnages?
+```{r, eval=FALSE}
+lm <- lm(data = data, rosette.leaf.num~days.to.flower*day.length)
+extract_eq(lm)
+```
 
-8. Changez le thème du document dans l'entête YAML. Vous avez le choix entre les thèmes  “cerulean”, “cosmo”, “flatly”, “journal”, “lumen”, “paper”, “readable”, “sandstone”, “simplex”, “spacelab”, “united”, et “yeti”, dont un aperçu est disponible [ici](https://www.datadreaming.org/post/r-markdown-theme-gallery/).
+Compilez pour admirer le rendu de l'équation.
 
-9. L'équation de Drake tente d'estimer le nombre de civilisations extra-terrestres dans notre galaxie avec qui nous puissions entrer en contact : $N = R^*.f_p .n_e.f_l.f_i.f_c.L$  où :
+Vérifiez si le modèle linéaire semble correct et inter^rétable au moyen des graphes sur les résidus, puis affichez les résultats du modèle dans une table interactive : 
 
-$N$ est le nombre probable de civilisations dans notre galaxie;
+```{r, eval=FALSE}
+gglm(lm)
+prettify(summary(lm))
+```
 
-et :
+Concluez sur les résultats du summary quant à l'effet du temps jusqu'à floraison et de la longueur du jour sur le nombre de feuilles (n'oubliez pas la signification du terme d’interaction).
 
-$R^*$ est le nombre d'étoiles qui se forment annuellement dans notre galaxie ;
 
-$f_p$ est la part des étoiles dotées de planètes ;
+### Supression des messages et warnings
 
-$n_e$ est l'espérance du nombre de planètes potentiellement propices à la vie par étoile ;
+Les données manquantes pour certaines observations et certaines fonctions génèrent des warnings lors de l'exécution du code. Pour qu'ils n'apparaissent pas dans le document, ajoutez un paramètre global dans au chunk spécifiant de ne pas rapporter les warnings.
 
-$f_l$ est la part de ces planètes où la vie apparaît effectivement ;
 
-$f_i$ est la part de ces planètes où apparaît la vie intelligente ;
 
-$f_c$ est la part de ces planètes capables et désireuses de communiquer ;
 
-$L$ est la durée de vie moyenne d'une civilisation, en années.
+### Personnaliser l'apparence du document
 
-Incluez cette formule à votre rapport avec la [syntaxe Latex](https://en.wikibooks.org/wiki/LaTeX/Mathematics) dans votre document, en l'entourant de symboles "$".
 
-En pratique, l'estimation des paramètres la composant est tellement difficile et incertaine, que selon leur valeur supposée, le résultat final peut avoir toutes les valeurs entre 0, et une infinité de civilisations.
+Changez le `theme` du document dans l'entête YAML. Vous avez le choix entre les thèmes  “cerulean”, “cosmo”, “flatly”, “journal”, “lumen”, “paper”, “readable”, “sandstone”, “simplex”, “spacelab”, “united”, et “yeti”, dont un aperçu est disponible [ici](https://www.datadreaming.org/post/r-markdown-theme-gallery/).
+Le thème de la coloration syntaxique du code R dans les chunks peut également être changé avec l'option `highlight`.
 
-10. Ajoutez une référence bibliographique à votre document sur le thème de la science fiction. Par exemple, dans google scholar, vous pouvez accéder à la citation bibtex des articles (icone double quote sous un article, puis choisir bibTex). La citation peut ensuite être copiée dans un fichier bibliography.bib, placé dans le folder de votre rapport. Dans l'entête YAML, ajoutez la ligne `bibliography: bibliography.bib`, puis citez la ressource dans le document avec @, succédé de l'identifiant de la référence (premier champ de la citation au format bibtex). Plus de détails sont disponibles [ici](https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html). Ajoutez une section "Références" vide à la fin du document, qui sera remplie automatiquement.
+
+
+10. Ajoutez une référence bibliographique à votre document sur le thème de la science fiction. Par exemple, dans google scholar, vous pouvez accéder à la citation bibtex des articles (icone double quote sous un article, puis choisir bibTex). La citation peut ensuite être copiée dans un fichier bibliography.bib, placé dans le folder de votre rapport. Dans l'entête YAML, ajoutez la ligne `bibliography: data/biblio.bib`, puis citez la ressource entre crochets contenant @, suivi de l'identifiant de la référence (premier champ de la citation au format bibtex). Plus de détails sont disponibles [ici](https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html). Ajoutez une section `# Références` vide à la fin du document, car les références sont automatiquement ajoutées en fin de document.
+
 
 
 <!-- Le TP demandé doit contenir : -->

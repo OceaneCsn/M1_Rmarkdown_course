@@ -69,7 +69,7 @@ La durée du jour est également influente, car on voit que des jours longs fero
 Il s'agit ici de reproduire le même graphe mais en se demandant si les durées jusqu'à floraison sont significativement impactées par la température. La fonction ```stat_compare_means``` du package ```ggpubr``` permet de rajouter un test de comparaison de moyennes (ici non paramétrqie, le wilcox.test)
 
 
-```{r pvalues, warning=F, message=TRUE}
+```{r pvalues, warning=FALSE, message=TRUE}
 comparisons <- list(c("12", "22"))
 ggplot(data, aes(x = temperature, 
                  y = days.to.flower, 
