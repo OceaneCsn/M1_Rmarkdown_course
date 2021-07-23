@@ -9,7 +9,7 @@ output:
     df_print: paged
     includes:
       after_body: footer.html
-  bibliography: data/biblio.bib
+bibliography: ./data/biblio.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -28,7 +28,7 @@ library(gglm)
 Ce document est une proposition de solution pour la session pratique d'introduction à la rédaction de rapports d'analyse sous Rmarkdown.
 Il s'agit du document final, sensé être obtenu après avoir suivi les directives du sujet.
 
-Les données analysées sont issues d'un publication intitulée "Fluctuating, warm temperatures decrease the effect of a key floral repressor on flowering time in Arabidopsis thaliana" de 2015 : <https://nph.onlinelibrary.wiley.com/doi/10.1111/nph.13799>.
+Les données analysées sont issues d'un [publication](https://nph.onlinelibrary.wiley.com/doi/10.1111/nph.13799) intitulée "Fluctuating, warm temperatures decrease the effect of a key floral repressor on flowering time in Arabidopsis thaliana" de 2015 [@Burghardt2015]
 
 Dans ces données, plusieurs génotypes d'Arabidopsis thaliana, une plante modèle, ont été phénotypés (leurs caractéristiques morphologiques, leur réponse à l'environnement, ont été mesurés).
 
