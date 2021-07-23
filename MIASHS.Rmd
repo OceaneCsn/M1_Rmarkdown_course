@@ -310,6 +310,21 @@ Exécutez un chunk avec la petite flèche verte en haut à droite, ou avec Ctrl+
 Après exécution, un objet data est apparu dans votre environnement RStudio. Vous pouvez l'inspecter avec la commande `View(data)` dans la console.
 
 
+### Affichage `paged` des dataframes
+
+Pour améliorer le rendu dans dataframes comme en sortie de `head`, on va utiliser l'option d'affiche suivante dans la partie YAML comme dans cet exemple : 
+```
+---
+title: "Visualisation et analyse de données de biologie végétale"
+output:
+  html_document:
+    df_print: paged
+---
+```
+
+Ajoutez l'option et re-compilez.
+
+
 
 ### Visualisation
 
@@ -405,9 +420,9 @@ Concluez sur les résultats du summary quant à l'effet du temps jusqu'à florai
 
 ### Supression des messages et warnings
 
-Les données manquantes pour certaines observations et certaines fonctions génèrent des warnings lors de l'exécution du code. Pour qu'ils n'apparaissent pas dans le document, ajoutez un paramètre global dans au chunk spécifiant de ne pas rapporter les warnings.
+Les données manquantes pour certaines observations et certaines fonctions génèrent des warnings lors de l'exécution du code. Pour qu'ils n'apparaissent pas dans le document, ajoutez un paramètre global dans le premier chunk spécifiant de ne pas rapporter les warnings ni les messages.
 
-
+*Attention, ne faire ça qu'en fin d'édition, et lorsque l'on est sûr que ces messages et warnings ne sont pas problématiques, ni des informations importantes.*
 
 
 ### Personnaliser l'apparence du document
@@ -418,7 +433,40 @@ Le thème de la coloration syntaxique du code R dans les chunks peut également 
 
 
 
-10. Ajoutez une référence bibliographique à votre document sur le thème de la science fiction. Par exemple, dans google scholar, vous pouvez accéder à la citation bibtex des articles (icone double quote sous un article, puis choisir bibTex). La citation peut ensuite être copiée dans un fichier bibliography.bib, placé dans le folder de votre rapport. Dans l'entête YAML, ajoutez la ligne `bibliography: data/biblio.bib`, puis citez la ressource entre crochets contenant @, suivi de l'identifiant de la référence (premier champ de la citation au format bibtex). Plus de détails sont disponibles [ici](https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html). Ajoutez une section `# Références` vide à la fin du document, car les références sont automatiquement ajoutées en fin de document.
+### Section de bibliographie
+
+
+Ajoutez une référence bibliographique pour référencer la publication relative aux données analysées. Vous pouvez procéder comme suit :
+
++ Téléchargez le fichier contenant les informations de la référence (format .bib) à [cette adresse](https://raw.githubusercontent.com/OceaneCsn/M1_Rmarkdown_course/master/data/biblio.bib) et placez le dans le folder data du projet.
+
++ Ajouter dans l'entête YAML un champs `bibliography: data/biblio.bib`
+Comme dans cet exemple:
+
+
+
++ Citez cette référence dans votre section contexte comme suit: `[@Burghardt2015]`.
+
++ Ajoutez une dernière section `# Références` vide à la fin du document, car les références sont automatiquement ajoutées en fin de document
+Recompilez et pour vérifier que le résultat est comme attendu.
+
+Plus de détails sur les  sont disponibles [ici](https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html). Ajoutez une section `# Références` vide à la fin du document, car les références sont automatiquement ajoutées en fin de document.
+
+
+### Ajouter un footer
+
+Pour reproduire le pied de page de ce sujet (Nom de l'auteur, lien vers son site personnel/github, etc), vous pouvez créer un document `footer.html` à la racine du projet en vous inspirant de [celui ci](https://raw.githubusercontent.com/OceaneCsn/M1_Rmarkdown_course/master/footer.html)
+
+
+```
+---
+title: "Visualisation et analyse de données de biologie végétale"
+output:
+  html_document:
+    includes:
+      after_body: footer.html
+---
+```
 
 
 
@@ -430,7 +478,7 @@ Le thème de la coloration syntaxique du code R dans les chunks peut également 
 
 <!-- + La citation d'une référence ok -->
 
-<!-- + Un chunck modifié pour avoir des figures plus grandes ok -->
+<!-- + Un chunk modifié pour avoir des figures plus grandes ok -->
 
 <!-- + Un sans echo ok -->
 

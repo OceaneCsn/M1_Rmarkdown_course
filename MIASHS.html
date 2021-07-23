@@ -385,6 +385,8 @@ date: &quot;8/15/2020&quot;
 output:
   html_document:
     theme: united
+    number_sections: true
+    highlight: breezedark
 ---</code></pre>
 <ul>
 <li>Des morceaux de code appelés <strong>chunks</strong>, dans lesquels les analyses et les calculs en R sont menés. Un chunck prend en option le langage utilisé, ainsi qu’un certain nombre de paramètres. Par example, <code>include = FALSE</code> ne fait pas apparaître le code ni les résultats dans le document fini. <code>echo = FALSE</code> montre les sorties du code mais pas le code lui même. <code>fig.cap = &quot;Ma figure&quot;</code> attribue la légende désirée à une figure générée par le chunk.</li>
@@ -445,78 +447,109 @@ Informations sur les packages
 <p>La fonction <code>dim</code> donne les dimensions du dataframe, et <code>head</code> donne un perçu de ses premières lignes.</p>
 <p>Exécutez un chunk avec la petite flèche verte en haut à droite, ou avec Ctrl+Shift+Enter. Après exécution, un objet data est apparu dans votre environnement RStudio. Vous pouvez l’inspecter avec la commande <code>View(data)</code> dans la console.</p>
 </div>
-<div id="visualisation" class="section level3" number="2.2.3">
-<h3 number="2.2.3"><span class="header-section-number">2.2.3</span> Visualisation</h3>
+<div id="affichage-paged-des-dataframes" class="section level3" number="2.2.3">
+<h3 number="2.2.3"><span class="header-section-number">2.2.3</span> Affichage <code>paged</code> des dataframes</h3>
+<p>Pour améliorer le rendu dans dataframes comme en sortie de <code>head</code>, on va utiliser l’option d’affiche suivante dans la partie YAML comme dans cet exemple :</p>
+<pre><code>---
+title: &quot;Visualisation et analyse de données de biologie végétale&quot;
+output:
+  html_document:
+    df_print: paged
+---</code></pre>
+<p>Ajoutez l’option et re-compilez.</p>
+</div>
+<div id="visualisation" class="section level3" number="2.2.4">
+<h3 number="2.2.4"><span class="header-section-number">2.2.4</span> Visualisation</h3>
 <p>Créez une section Visualisation.</p>
 <p>Créez ensuite une sous-section <code>## Simple visualisation</code>.</p>
 <p>Nous allons ici représenter le nombre de jours jusqu’à floraison pour les différents génotypes, durée de jours (qui peuvent être contrôlés dans des chambres artificielles), et la température de culture. Voici le code à utiliser pour réaliser le graphique, utilisant la librairie ggplot2 :</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>temperature <span class="ot">&lt;-</span> <span class="fu">factor</span>(data<span class="sc">$</span>temperature)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>day.length <span class="ot">=</span> <span class="fu">factor</span>(data<span class="sc">$</span>day.length)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(temperature), </span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> days.to.flower, </span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> genotype )) <span class="sc">+</span> </span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>)<span class="sc">+</span> </span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">fill =</span> genotype), <span class="at">alpha =</span> <span class="fl">0.3</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(day.length<span class="sc">~</span>genotype) <span class="sc">+</span> </span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Temperature&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>temperature <span class="ot">&lt;-</span> <span class="fu">factor</span>(data<span class="sc">$</span>temperature)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>day.length <span class="ot">=</span> <span class="fu">factor</span>(data<span class="sc">$</span>day.length)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(temperature), </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> days.to.flower, </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> genotype )) <span class="sc">+</span> </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>)<span class="sc">+</span> </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">fill =</span> genotype), <span class="at">alpha =</span> <span class="fl">0.3</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(day.length<span class="sc">~</span>genotype) <span class="sc">+</span> </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Temperature&quot;</span>)</span></code></pre></div>
 <p>Exécutez le chunk, et compilez le document avec knitr.</p>
 </div>
-<div id="changement-de-la-taille-dune-image" class="section level3" number="2.2.4">
-<h3 number="2.2.4"><span class="header-section-number">2.2.4</span> Changement de la taille d’une image</h3>
+<div id="changement-de-la-taille-dune-image" class="section level3" number="2.2.5">
+<h3 number="2.2.5"><span class="header-section-number">2.2.5</span> Changement de la taille d’une image</h3>
 <p>L’image est de taille assez petite. De manière globale à tout le document, demandez des images de hauteur 8 et de largeur 12. Pour cela, ajoutez des paramètres <code>fig.width</code> et <code>fig.height</code> à <code>knitr::opts_chunk$set(echo = TRUE)</code> dans le premier chunk.</p>
 <p>Recompliez le document pour vérifier que le changement de taille a bien eu lieu.</p>
 </div>
-<div id="ajout-des-tests-statistiques-sur-la-visualisation" class="section level3" number="2.2.5">
-<h3 number="2.2.5"><span class="header-section-number">2.2.5</span> Ajout des tests statistiques sur la visualisation</h3>
+<div id="ajout-des-tests-statistiques-sur-la-visualisation" class="section level3" number="2.2.6">
+<h3 number="2.2.6"><span class="header-section-number">2.2.6</span> Ajout des tests statistiques sur la visualisation</h3>
 <p>On constate qu’une température plus élevée aura tendance à diminuer le temps nécessaire à la floraison. Il s’agit ici de reproduire le même graphe mais en se demandant si les durées jusqu’à floraison sont significativement impactées par la température. La fonction <code>stat_compare_means</code> du package <code>ggpubr</code> permet de rajouter un test de comparaison de moyennes (ici non paramétrique, le wilcox.test)</p>
 <p>Créez une sous-section <code>## Visualisation avec tests statistiques</code></p>
 <p>Ajoutez en dessous un nouveau chunk contenant :</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>comparisons <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;12&quot;</span>, <span class="st">&quot;22&quot;</span>))</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> temperature, </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> days.to.flower, </span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> genotype )) <span class="sc">+</span> </span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>)<span class="sc">+</span> </span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">fill =</span> genotype), <span class="at">alpha =</span> <span class="fl">0.3</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(day.length<span class="sc">~</span>genotype) <span class="sc">+</span> </span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Temperature&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_compare_means</span>(<span class="at">comparisons =</span> comparisons, <span class="at">label =</span> <span class="st">&quot;p.signif&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>comparisons <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">&quot;12&quot;</span>, <span class="st">&quot;22&quot;</span>))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> temperature, </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> days.to.flower, </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> genotype )) <span class="sc">+</span> </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>)<span class="sc">+</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">fill =</span> genotype), <span class="at">alpha =</span> <span class="fl">0.3</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(day.length<span class="sc">~</span>genotype) <span class="sc">+</span> </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Temperature&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_compare_means</span>(<span class="at">comparisons =</span> comparisons, <span class="at">label =</span> <span class="st">&quot;p.signif&quot;</span>)</span></code></pre></div>
 </div>
-<div id="utiliser-des-onglets-pour-organiser-les-sous-sections" class="section level3" number="2.2.6">
-<h3 number="2.2.6"><span class="header-section-number">2.2.6</span> Utiliser des onglets pour organiser les sous-sections</h3>
+<div id="utiliser-des-onglets-pour-organiser-les-sous-sections" class="section level3" number="2.2.7">
+<h3 number="2.2.7"><span class="header-section-number">2.2.7</span> Utiliser des onglets pour organiser les sous-sections</h3>
 <p>Nous allons maintenant faire comme dans ce sujet de TP et positionner chacune des sous-sections dans deux onglets. Pour cela, il suffit de spécifier des options à la section supérieure <code># Visualisation</code>, qui devient <code># Visualisation {.tabset .tabset-fade}</code></p>
 <p>Compilez et inspectez le résultat.</p>
 </div>
-<div id="régression" class="section level3" number="2.2.7">
-<h3 number="2.2.7"><span class="header-section-number">2.2.7</span> Régression</h3>
+<div id="régression" class="section level3" number="2.2.8">
+<h3 number="2.2.8"><span class="header-section-number">2.2.8</span> Régression</h3>
 <p>On va expliquer le nombre de feuilles d’une plante au moyen du temps qu’elle a mis a fleurir, et de la longueur des jours lors de la culture. Dans une nouvelle section, expliquez l’objectif et affichez la relation entre le nombre de feuilles et le temps jusqu’à floraison. On distingue les observations réalisées en jours courts ou en jours longs par la couleur:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> days.to.flower, </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> rosette.leaf.num, </span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> day.length)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> days.to.flower, </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">y =</span> rosette.leaf.num, </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> day.length)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
 <p>On réalise la régression au moyen de la fonction <code>lm</code>, puis on extrait et on affiche en syntaxe latex de l’équation de ce modèle linéaire :</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> data, rosette.leaf.num<span class="sc">~</span>days.to.flower<span class="sc">*</span>day.length)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">extract_eq</span>(lm)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="at">data =</span> data, rosette.leaf.num<span class="sc">~</span>days.to.flower<span class="sc">*</span>day.length)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">extract_eq</span>(lm)</span></code></pre></div>
 <p>Compilez pour admirer le rendu de l’équation.</p>
 <p>Vérifiez si le modèle linéaire semble correct et inter^rétable au moyen des graphes sur les résidus, puis affichez les résultats du modèle dans une table interactive :</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gglm</span>(lm)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prettify</span>(<span class="fu">summary</span>(lm))</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gglm</span>(lm)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prettify</span>(<span class="fu">summary</span>(lm))</span></code></pre></div>
 <p>Concluez sur les résultats du summary quant à l’effet du temps jusqu’à floraison et de la longueur du jour sur le nombre de feuilles (n’oubliez pas la signification du terme d’interaction).</p>
 </div>
-<div id="supression-des-messages-et-warnings" class="section level3" number="2.2.8">
-<h3 number="2.2.8"><span class="header-section-number">2.2.8</span> Supression des messages et warnings</h3>
-<p>Les données manquantes pour certaines observations et certaines fonctions génèrent des warnings lors de l’exécution du code. Pour qu’ils n’apparaissent pas dans le document, ajoutez un paramètre global dans au chunk spécifiant de ne pas rapporter les warnings.</p>
+<div id="supression-des-messages-et-warnings" class="section level3" number="2.2.9">
+<h3 number="2.2.9"><span class="header-section-number">2.2.9</span> Supression des messages et warnings</h3>
+<p>Les données manquantes pour certaines observations et certaines fonctions génèrent des warnings lors de l’exécution du code. Pour qu’ils n’apparaissent pas dans le document, ajoutez un paramètre global dans le premier chunk spécifiant de ne pas rapporter les warnings ni les messages.</p>
+<p><em>Attention, ne faire ça qu’en fin d’édition, et lorsque l’on est sûr que ces messages et warnings ne sont pas problématiques, ni des informations importantes.</em></p>
 </div>
-<div id="personnaliser-lapparence-du-document" class="section level3" number="2.2.9">
-<h3 number="2.2.9"><span class="header-section-number">2.2.9</span> Personnaliser l’apparence du document</h3>
+<div id="personnaliser-lapparence-du-document" class="section level3" number="2.2.10">
+<h3 number="2.2.10"><span class="header-section-number">2.2.10</span> Personnaliser l’apparence du document</h3>
 <p>Changez le <code>theme</code> du document dans l’entête YAML. Vous avez le choix entre les thèmes “cerulean”, “cosmo”, “flatly”, “journal”, “lumen”, “paper”, “readable”, “sandstone”, “simplex”, “spacelab”, “united”, et “yeti”, dont un aperçu est disponible <a href="https://www.datadreaming.org/post/r-markdown-theme-gallery/">ici</a>. Le thème de la coloration syntaxique du code R dans les chunks peut également être changé avec l’option <code>highlight</code>.</p>
-<ol start="10" style="list-style-type: decimal">
-<li>Ajoutez une référence bibliographique à votre document sur le thème de la science fiction. Par exemple, dans google scholar, vous pouvez accéder à la citation bibtex des articles (icone double quote sous un article, puis choisir bibTex). La citation peut ensuite être copiée dans un fichier bibliography.bib, placé dans le folder de votre rapport. Dans l’entête YAML, ajoutez la ligne <code>bibliography: data/biblio.bib</code>, puis citez la ressource entre crochets contenant @, suivi de l’identifiant de la référence (premier champ de la citation au format bibtex). Plus de détails sont disponibles <a href="https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html">ici</a>. Ajoutez une section <code># Références</code> vide à la fin du document, car les références sont automatiquement ajoutées en fin de document.</li>
-</ol>
+</div>
+<div id="section-de-bibliographie" class="section level3" number="2.2.11">
+<h3 number="2.2.11"><span class="header-section-number">2.2.11</span> Section de bibliographie</h3>
+<p>Ajoutez une référence bibliographique pour référencer la publication relative aux données analysées. Vous pouvez procéder comme suit :</p>
+<ul>
+<li><p>Téléchargez le fichier contenant les informations de la référence (format .bib) à <a href="https://raw.githubusercontent.com/OceaneCsn/M1_Rmarkdown_course/master/data/biblio.bib">cette adresse</a> et placez le dans le folder data du projet.</p></li>
+<li><p>Ajouter dans l’entête YAML un champs <code>bibliography: data/biblio.bib</code> Comme dans cet exemple:</p></li>
+<li><p>Citez cette référence dans votre section contexte comme suit: <code>[@Burghardt2015]</code>.</p></li>
+<li><p>Ajoutez une dernière section <code># Références</code> vide à la fin du document, car les références sont automatiquement ajoutées en fin de document Recompilez et pour vérifier que le résultat est comme attendu.</p></li>
+</ul>
+<p>Plus de détails sur les sont disponibles <a href="https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html">ici</a>. Ajoutez une section <code># Références</code> vide à la fin du document, car les références sont automatiquement ajoutées en fin de document.</p>
+</div>
+<div id="ajouter-un-footer" class="section level3" number="2.2.12">
+<h3 number="2.2.12"><span class="header-section-number">2.2.12</span> Ajouter un footer</h3>
+<p>Pour reproduire le pied de page de ce sujet (Nom de l’auteur, lien vers son site personnel/github, etc), vous pouvez créer un document <code>footer.html</code> à la racine du projet en vous inspirant de <a href="https://raw.githubusercontent.com/OceaneCsn/M1_Rmarkdown_course/master/footer.html">celui ci</a></p>
+<pre><code>---
+title: &quot;Visualisation et analyse de données de biologie végétale&quot;
+output:
+  html_document:
+    includes:
+      after_body: footer.html
+---</code></pre>
 <!-- Le TP demandé doit contenir : -->
 <!-- + Une équation mathématique ok -->
 <!-- + Un lien vers un site web ok -->
 <!-- + La citation d'une référence ok -->
-<!-- + Un chunck modifié pour avoir des figures plus grandes ok -->
+<!-- + Un chunk modifié pour avoir des figures plus grandes ok -->
 <!-- + Un sans echo ok -->
 <!-- + Changer le theme ok -->
 <!-- + Des stats nah -->

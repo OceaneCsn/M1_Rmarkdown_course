@@ -6,7 +6,6 @@ output:
   html_document:
     theme: united
     highlight: breezedark
-    df_print: paged
     includes:
       after_body: footer.html
 bibliography: ./data/biblio.bib
@@ -103,7 +102,7 @@ prettify(summary(lm))
 ```
 
 
-Pour nous assurer que le modèle linéaire est correct et interprêtabe, nous inspectons ses résidus : 
+Pour nous assurer que le modèle linéaire est correct et interprétable, nous inspectons ses résidus : 
 
 
 ```{r}
