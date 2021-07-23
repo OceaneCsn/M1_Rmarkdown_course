@@ -1,12 +1,14 @@
 ---
 title: "L'IDE RStudio et l'édition de documents Rmarkdown"
 author: "Océane Cassan - oceane.cassan@cnrs.fr"
-date: "8/15/2020"
+date: "08/31/2021"
 output:
   html_document:
     theme: united
     number_sections: true
     highlight: breezedark
+    includes:
+      after_body: footer.html
 ---
 
 ```{r setup, include=FALSE}
@@ -186,11 +188,11 @@ Il est possible d'y inclure du code R et ses sorties, en les encapsulant dans un
 
 ### Fonctionnement
 
-L'édition de Rmarkdown se fait généralement sous RStudio, qui propose une interface de Notebook, permettant d'exécuter les chunks de code R souhaité, tout en rédigeant la partie textuelle en markdown. 
+L'édition de Rmarkdown se fait généralement sous RStudio, qui propose une interface de Notebook, permettant d'exécuter les chunks de code R souhaités, tout en rédigeant la partie textuelle en markdown. 
 
-Pour créer le document fini, on utilise le bouton **knitr**. Le logiciel knitr est alors utilisé pour créer un document markdown contenant le code et ses sorties, avec le reste du texte, puis le logiciel pandoc se charge de donner au document son format et apparence finale (html, pdf...). 
+Pour créer le document fini, on utilise le bouton **Knit**. Le logiciel knitr est alors utilisé pour créer un document markdown contenant le code et ses sorties, avec le reste du texte, puis le logiciel pandoc se charge de donner au document son format et apparence finale (html, pdf...). 
 
-![Rmarkdown flow.](./Images/rmarkdownflow.png)
+![Rmarkdown workflow.](./Images/rmarkdownflow.png)
 
 
 
@@ -199,11 +201,11 @@ Pour créer le document fini, on utilise le bouton **knitr**. Le logiciel knitr 
 + Un **header** du format YAML (Yet Another Markup Langage) qui donne les paramètres du document (type de format (pdf, html), l'auteur, la date, le thème, des paramètres pour le code R, un fichier de bibliographie...). Il est entouré des délimiteurs --- .  Par exemple, l'entête YAML de ce document est :
 
 
-```{}
+```{yaml}
 ---
 title: "L'IDE RStudio et l'édition de documents Rmarkdown"
 author: "Océane Cassan - oceane.cassan@cnrs.fr"
-date: "8/15/2020"
+date: "08/31/2020"
 output:
   html_document:
     theme: united
@@ -237,7 +239,7 @@ Tout d'abord, nous aurons besoin de certains packages.
 Assurez-vous de leur installation avant de commencer. Pou cela, dans la console R, exécutez la commande suivante qui fera les installations des packages manquants uniquement :
 
 ```{r, eval=FALSE}
-packages <- c("ggplot2", "ggpubr", "gglm", "equatiomatic", "papeR", "knitr")
+packages <- c("ggplot2", "ggpubr", "gglm", "equatiomatic", "papeR", "knitr", "plotly")
 install.packages(setdiff(packages, rownames(installed.packages())))  
 ``` 
 
@@ -251,11 +253,13 @@ install.packages(setdiff(packages, rownames(installed.packages())))
   
   **equatiomatic** : donne la formule d'un modèle de régression en formule latex
   
-  **papeR** : formatte des résultats de summary de modèles de régression
+  **papeR** : formate des résultats de summary de modèles de régression
   
   **gglm** : graphes des résidus d'un modèle de régression
   
   **knitr** : outils pour la compilation de documents Rmd
+  
+  **plotly** : makes ggplot graphs interactive
 
   </div>
 </div>
@@ -266,11 +270,11 @@ install.packages(setdiff(packages, rownames(installed.packages())))
 ### Initialisation de l'environnement de travail.
 
 + Ouvrez RStudio et créez un nouveau projet (File/New Project.../New Directory).
-Choisissez un emplacement et créez votre projet. A la racine du projet, créez un folder "data", dans lequel vous pouvez télécharger les données que nous allons utiliser aujourd'hui pour illustrer les fonctionalités de Rmarkdown : "https://raw.githubusercontent.com/OceaneCsn/M1_Rmarkdown_course/master/data/burghardt_et_al_2015_expt1.csv".
+Choisissez un emplacement et créez votre projet. A la racine du projet, créez un folder "data", dans lequel vous pouvez [télécharger les données](https://raw.githubusercontent.com/OceaneCsn/M1_Rmarkdown_course/master/data/burghardt_et_al_2015_expt1.csv) que nous allons utiliser aujourd'hui pour illustrer les fonctionnalités de Rmarkdown.
 
-+ Créez un nouveau document Rmarkdown qui sera votre script de TP, via le menu File/New file/R Markdown (acceptez les éventuelles mises à jour). Laissez l'option HTML par défaut. Comme vous le constatez, RStudio propose déjà un petit template d'exemple fonctionnel de Rmarkdown. Vous pouvez déjà le sauvegarder et le compiler avec le bouton knitr en haut de panel du script. Inspectez le résultat ainsi que le code l'ayant généré.
++ Créez un nouveau document Rmarkdown qui sera votre script de TP, via le menu File/New file/R Markdown (acceptez les éventuelles mises à jour). Laissez l'option HTML par défaut. Comme vous le constatez, RStudio propose déjà un petit template d'exemple fonctionnel de Rmarkdown. Vous pouvez le sauvegarder et le compiler avec le bouton knitr en haut de panel du script. Inspectez le résultat obtenu, ainsi que le code l'ayant généré.
 
-+ Personnalisez si nécessaire le template dnas l'entête YAML (auteur, titre, date...). 
++ Personnalisez si nécessaire le template dans l'entête YAML (auteur, titre, date...). 
 
 + Le premier chunk de setup doit être conservé. Rajoutez-y l'import des packages que nous allons utiliser. Il doit donc maintenant contenir : 
 
@@ -281,6 +285,7 @@ library(ggpubr)
 library(equatiomatic)
 library(papeR)
 library(gglm)
+library(plotly)
 ```
 
 Nous continuerons de le modifier plus tard dans l'énoncé. Exécutez ce chunk avec la petite flèche verte en haut à droite, ou avec Ctrl+Shift+Enter.
@@ -313,7 +318,7 @@ Après exécution, un objet data est apparu dans votre environnement RStudio. Vo
 ### Affichage `paged` des dataframes
 
 Pour améliorer le rendu dans dataframes comme en sortie de `head`, on va utiliser l'option d'affiche suivante dans la partie YAML comme dans cet exemple : 
-```
+```{yaml}
 ---
 title: "Visualisation et analyse de données de biologie végétale"
 output:
@@ -455,10 +460,11 @@ Plus de détails sur les  sont disponibles [ici](https://rmarkdown.rstudio.com/a
 
 ### Ajouter un footer
 
-Pour reproduire le pied de page de ce sujet (Nom de l'auteur, lien vers son site personnel/github, etc), vous pouvez créer un document `footer.html` à la racine du projet en vous inspirant de [celui ci](https://raw.githubusercontent.com/OceaneCsn/M1_Rmarkdown_course/master/footer.html)
+Pour reproduire le pied de page de ce sujet (Nom de l'auteur, lien vers son site personnel/github, etc), vous pouvez créer un document `footer.html` à la racine du projet en vous inspirant de [celui ci](https://raw.githubusercontent.com/OceaneCsn/M1_Rmarkdown_course/master/footer.html).
+Incluez le ensuite au document comme suit:
 
 
-```
+```{yaml}
 ---
 title: "Visualisation et analyse de données de biologie végétale"
 output:

@@ -6,6 +6,7 @@ output:
   html_document:
     theme: united
     highlight: breezedark
+    df_print: paged
     includes:
       after_body: footer.html
 bibliography: ./data/biblio.bib
@@ -20,6 +21,7 @@ library(ggpubr)
 library(equatiomatic)
 library(papeR)
 library(gglm)
+library(plotly)
 ```
 
 # Contexte
@@ -27,7 +29,7 @@ library(gglm)
 Ce document est une proposition de solution pour la session pratique d'introduction à la rédaction de rapports d'analyse sous Rmarkdown.
 Il s'agit du document final, sensé être obtenu après avoir suivi les directives du sujet.
 
-Les données analysées sont issues d'un [publication](https://nph.onlinelibrary.wiley.com/doi/10.1111/nph.13799) intitulée "Fluctuating, warm temperatures decrease the effect of a key floral repressor on flowering time in Arabidopsis thaliana" de 2015 [@Burghardt2015]
+Les données analysées sont issues d'une [publication](https://nph.onlinelibrary.wiley.com/doi/10.1111/nph.13799) intitulée "Fluctuating, warm temperatures decrease the effect of a key floral repressor on flowering time in Arabidopsis thaliana" de 2015 [@Burghardt2015]
 
 Dans ces données, plusieurs génotypes d'Arabidopsis thaliana, une plante modèle, ont été phénotypés (leurs caractéristiques morphologiques, leur réponse à l'environnement, ont été mesurés).
 
@@ -87,10 +89,10 @@ ggplot(data, aes(x = temperature,
 Tout d'abord, on affiche la relation entre le nombre de feuilles et le temps jusqu'à floraison. On distingue les observations réalisées en jours courts ou en jours longs par la couleur :
 
 
-```{r message=FALSE, warning=FALSE}
-ggplot(data, aes(x = days.to.flower, 
+```{r}
+ggplotly(ggplot(data, aes(x = days.to.flower, 
                  y = rosette.leaf.num, 
-                 color = day.length)) + geom_point()
+                 color = day.length)) + geom_point())
 ```
 
 On va expliquer le nombre de feuilles d'une plante au moyen du temps qu'elle a mis a fleurir, et de la longueur des jours lors de la culture (en ajoutant un terme d'interaction).
