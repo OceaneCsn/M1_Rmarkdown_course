@@ -103,11 +103,23 @@ prettify(summary(lm))
 ```
 
 
-Pour nous assurer que le modèle linéaire est correct et interprêtabe, nous inspectons ses résudis : 
+Pour nous assurer que le modèle linéaire est correct et interprêtabe, nous inspectons ses résidus : 
 
 
 ```{r}
 gglm(lm)
 ```
+
+
+Ce que l'on peut conclure des résultats du modèle linéaire :
+
++ Effet positif significatif du temps jusqu'à floraison sur le nombre de feuilles : augmenter ce temps de une unité fait augmenter le nombre de feuille de 0.53. (pour le niveau référence de la langueur de jour)
+
++ Effet négatif significatif de l'allongement du jour : pour le niveau référence du temps de floraison, passer de 8j à 16j de culture diminue le nombre moyen de feuilles de 14 environ.
+
++ L'interaction positive est significative : il y a un changement de pente entre la droite de régression sur la durée de floraison, suivant que les jours soient longs ou courts. A 16 jours, la nombre de feuilles augmente plus fortement sous l'effet du temps jusqu'à floraison qu' à 8j.
+
+
+
 
 # References

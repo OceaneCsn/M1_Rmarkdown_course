@@ -5,6 +5,8 @@ date: "8/15/2020"
 output:
   html_document:
     theme: united
+    number_sections: true
+    highlight: breezedark
 ---
 
 ```{r setup, include=FALSE}
@@ -40,7 +42,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ---
 
-Rstudio est l'Environement de Développement Intégré très majoritairement employé par les utilisateurs du langage R.
+Rstudio est l’Environnement de Développement Intégré très majoritairement employé par les utilisateurs du langage R.
 
 
 ## Les composantes principales de l'interface
@@ -162,17 +164,17 @@ Dans chaque container, différents onglets permettent d'accéder aux fonctionnal
 
 + Une cheat-sheet très complète sur l'interface RStudio : <https://raw.githubusercontent.com/rstudio/cheatsheets/master/rstudio-ide.pdf>
 
-+ La communauté des utilisateurs de R/RStudio est très active et développée : <https://community.rstudio.com/> est un forum d'échange et d'aide aux développeurs. Des groupes comme [RWeekly](https://rweekly.org/), les [Rladies](https://rladies.org/), [SatRdays](https://satrdays.org/), effectuent des conférences régulièrement et communiquent sur les réseaux sociaux, sur les nouveautés liées à R.
++ La communauté des utilisateurs de R/RStudio est très active et développée : <https://community.rstudio.com/> est un forum d'échange et d'aide aux développeurs. Des groupes comme [RWeekly](https://rweekly.org/), [SatRdays](https://satrdays.org/), effectuent des conférences régulièrement et communiquent sur les réseaux sociaux, sur les nouveautés liées à R.
 
 
-# Rédaction de rapports avec Rmarkdown <img src="./Images/Rmd.png" align="right" alt="" width="120" />
+# Rédaction de rapports avec Rmarkdown <img src="./Images/Rmd.png" align="right" alt="" width="120" /> {.tabset .tabset-fade}
 
 ---
 
 ## Quelques notions
 
 [Rmarkdown](http://rmarkdown.rstudio.com) est une syntaxe permettant la rédaction de documents HTML, PDF, Word, de slides, parmi d'autres formats.
-Il est possible d'y inclure du code R et ses sorties, en les encapsulant dans un rapport en markdown structuré, accompagné de description et d'interprêtations textuelles, de liens, d'images...
+Il est possible d'y inclure du code R et ses sorties, en les encapsulant dans un rapport en markdown structuré, accompagné de description et d’interprétations textuelles, de liens, d'images...
 
 
 ### Pourquoi utliliser du Rmarkdown?
@@ -255,20 +257,40 @@ install.packages(setdiff(packages, rownames(installed.packages())))
 
 
 
-Dans RStudio, vous pouvez créer un nouveau document Rmarkdown via le menu File/New file/R Markdown (acceptez les éventuelles mises à jour). Laissez l'option HTML par défaut, que nous allons développer aujourd'hui.
+
+### **Initialisation de l'environnement de travail**.
+
++ Ouvrez RStudio et créez un nouveau projet (File/New Project.../New Directory).
+Choisissez un emplacement et créez votre projet. A la racine du projet, créez un folder "data", dans lequel vous pouvez télécharger les données que nous allons utiliser aujourd'hui pour illustrer les fonctionalités de Rmarkdown : "https://raw.githubusercontent.com/OceaneCsn/M1_Rmarkdown_course/master/data/burghardt_et_al_2015_expt1.csv".
+
++ Créez un nouveau document Rmarkdown via le menu File/New file/R Markdown (acceptez les éventuelles mises à jour). Laissez l'option HTML par défaut.
+
++ Personnalisez le template dnas l'entête YAML (auteur, titre...). Vous pouvez déjà le sauvegarder et les compiler avec le bouton knitr en haut de panel du script. Inspectez le résultat ainsi que le code l'ayant généré.
 
 
-Au cours des étapes suivantes, utiliser knitr pour compiler et visualiser le rendu actuel du document.
++ Le premier chunk de setup doit être conservé. Rajoutez-y l'import des packages que nous allons utiliser. Il doit donc contenir : 
 
-0. Personnalisez le template dnas l'entête YAML (auteur, titre...). Le premier chunk de setup doit être conservé. La suite du template peut être modifié pour effectuer le TP.
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(ggpubr)
+library(equatiomatic)
+library(papeR)
+library(gglm)
+```
+
+Nous continuerons de le modifier plus tard dans l'énoncé. La suite du template peut être supprimée.
+
+Au cours des étapes suivantes, utilisez régulièrement knitr pour compiler et visualiser le rendu du document.
 
 
-Le support  de ce TP est un jeu de données décrivant diverses caractéristiques des personnages des films **Star Wars**, que nous allons explorer afin prendre en main les principales fonctionnalités présentées plus haut.
+1. **Donner le contexte et importer les données**
 
+Créez une première section nommée "Contexte" (`# Contexte`) et rappelez l'objectif du document (vous familiariser avec Rmarkdown). Vous pouvez également parler des données que nous allons utiliser comme base de notre démonstration : Les données analysées sont issues d'un [publication](https://nph.onlinelibrary.wiley.com/doi/10.1111/nph.13799) intitulée "Fluctuating, warm temperatures decrease the effect of a key floral repressor on flowering time in Arabidopsis thaliana" de 2015.
 
-1. Créez une première section nommée "Contexte" et rappelez l'objectif du document. Vous pouvez également introduire l'univers Star Wars selon votre envie. Incluez le [lien de l'API](https://swapi.dev/) qui a permis de constituer ces données.
+Dans ces données, plusieurs génotypes d'Arabidopsis thaliana, une plante modèle, ont été phénotypés (leurs caractéristiques morphologiques, leur réponse à l'environnement, ont été mesurés).
 
-Dans le premier chunk de votre document ( Ctrl + Alt + I, OS X: Cmd + Option + I), vous pouvez loader le jeu de données ainsi :
+Dans le premier chunk de votre document ( Ctrl + Alt + I, ou sous OS X: Cmd + Option + I), vous pouvez loader le jeu de données ainsi :
 
 ```{r eval=FALSE}
 library(dplyr)
