@@ -7,6 +7,9 @@ output:
     theme: united
     highlight: breezedark
     df_print: paged
+    includes:
+      after_body: footer.html
+  bibliography: data/biblio.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -17,20 +20,25 @@ library(ggplot2)
 library(ggpubr)
 library(equatiomatic)
 library(papeR)
+library(gglm)
 ```
 
 # Contexte
 
-Ce document est une proposition de solution pour la session pratique d'introduction à la rédaction de rapports d'analyse sous Rmarkdown. 
+Ce document est une proposition de solution pour la session pratique d'introduction à la rédaction de rapports d'analyse sous Rmarkdown.
+Il s'agit du document final, sensé être obtenu après avoir suivi les directives du sujet.
+
 Les données analysées sont issues d'un publication intitulée "Fluctuating, warm temperatures decrease the effect of a key floral repressor on flowering time in Arabidopsis thaliana" de 2015 : <https://nph.onlinelibrary.wiley.com/doi/10.1111/nph.13799>.
+
+Dans ces données, plusieurs génotypes d'Arabidopsis thaliana, une plante modèle, ont été phénotypés (leurs caractéristiques morphologiques, leur réponse à l'environnement, ont été mesurés).
 
 # Import des données
 
 On dispose de données liées à la floraison et aux phénotypes des parties aériennes de plantes de différents génotypes.
-Les fichier csv des données biologiques à étudier est importé et rapidement inspecté via la fonction ```summary``` :
+Les fichier csv des données biologiques à étudier est importé et ses premières lignes peuvent être inspectées via la fonction ```head``` :
 
 ```{r import}
-data <- read.csv("burghardt_et_al_2015_expt1.csv")
+data <- read.csv("data/burghardt_et_al_2015_expt1.csv")
 dim(data)
 head(data)
 ```
@@ -38,10 +46,12 @@ head(data)
 
 ## Visualisation simple 
 
-On affiche le nombre de jours jusqu'à floraison suivant les différents génotypes, durée de jours, et la température de culture :
+On affiche le nombre de jours jusqu'à floraison pour les différents génotypes, durée de jours, et la température de culture :
 
 ```{r visu, warning=FALSE, message=FALSE}
 data$temperature <- factor(data$temperature)
+data$day.length = factor(data$day.length)
+
 ggplot(data, aes(x = factor(temperature), 
                  y = days.to.flower, 
                  color = genotype )) + 
@@ -56,11 +66,10 @@ La durée du jour est également influente, car on voit que des jours longs fero
 
 ## Tests statistiques sur les visualisations
 
-Il s'agit ici de reproduire le même graphe mais en se demandant si les durées jusqu'à floraison sont significativement impactées par la température. La fonction ```stat_compare_means``` permet de rajouter un test de comparaison de moyennes (ici non paramétrqie, le wilcox.test)
+Il s'agit ici de reproduire le même graphe mais en se demandant si les durées jusqu'à floraison sont significativement impactées par la température. La fonction ```stat_compare_means``` du package ```ggpubr``` permet de rajouter un test de comparaison de moyennes (ici non paramétrqie, le wilcox.test)
 
 
 ```{r pvalues, warning=F, message=TRUE}
-
 comparisons <- list(c("12", "22"))
 ggplot(data, aes(x = temperature, 
                  y = days.to.flower, 
@@ -75,16 +84,30 @@ ggplot(data, aes(x = temperature,
 # Régression linéaire
 
 
-On va expliquer le nombre de feuilles d'une plante au moyen du temps qu'elle a mis a fleurir, et de la longueur des jours
+
+Tout d'abord, on affiche la relation entre le nombre de feuilles et le temps jusqu'à floraison. On distingue les observations réalisées en jours courts ou en jours longs par la couleur :
+
 
 ```{r message=FALSE, warning=FALSE}
 ggplot(data, aes(x = days.to.flower, 
                  y = rosette.leaf.num, 
-                 color = factor(day.length))) + geom_point()
+                 color = day.length)) + geom_point()
+```
 
+On va expliquer le nombre de feuilles d'une plante au moyen du temps qu'elle a mis a fleurir, et de la longueur des jours lors de la culture (en ajoutant un terme d'interaction).
 
-lm <- lm(data = data, rosette.leaf.num~days.to.flower*factor(day.length))
+```{r}
+lm <- lm(data = data, rosette.leaf.num~days.to.flower*day.length)
 extract_eq(lm)
 prettify(summary(lm))
 ```
 
+
+Pour nous assurer que le modèle linéaire est correct et interprêtabe, nous inspectons ses résudis : 
+
+
+```{r}
+gglm(lm)
+```
+
+# References

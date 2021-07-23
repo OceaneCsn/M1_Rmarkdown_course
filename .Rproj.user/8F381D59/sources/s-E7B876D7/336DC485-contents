@@ -233,15 +233,13 @@ Tout d'abord, nous aurons besoin de certains packages. Assurez-vous de leur inst
   
   **ggplot2** : visualisation de données
   
-  **dplyr** : manipulation de dataframes
+  **ggpubr** : extensions à ggplot pour des graphes prêts à la publication
   
-  **stringr** : manipulation de chaînes de caractères
+  **equatiomatic** : donne la formule d'un modèle de régression en formule latex
   
-  **igraph** : manipulation de graphes
+  **papeR** : formatte des résultats de summary de modèles de régression
   
-  **plotly** : graphiques interactfs 
-  
-  **visNetwork** : affichage de réseaux interactifs
+  **gglm** : graphes des résidus d'un modèle de régression
 
   </div>
 </div>
