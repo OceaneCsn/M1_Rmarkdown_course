@@ -233,7 +233,7 @@ La syntaxe de Rmarkdown dont vous allez avoir besoin par la suite est dans cette
 ## Partie pratique
 
 Maintenant, à vous de générer un rapport d'analyses.
-L'idée est de générer un rapport identique à [celui- ci](https://oceanecsn.github.io/M1_Rmarkdown_course/)
+L'idée est de générer un rapport identique à [celui- ci](https://oceanecsn.github.io/M1_Rmarkdown_course/) pour illustrer les fonctionnalités de Rmarkdown.
 
 Tout d'abord, nous aurons besoin de certains packages. 
 Assurez-vous de leur installation avant de commencer. Pou cela, dans la console R, exécutez la commande suivante qui fera les installations des packages manquants uniquement :
@@ -270,11 +270,11 @@ install.packages(setdiff(packages, rownames(installed.packages())))
 ### Initialisation de l'environnement de travail.
 
 + Ouvrez RStudio et créez un nouveau projet (File/New Project.../New Directory).
-Choisissez un emplacement et créez votre projet. A la racine du projet, créez un folder "data", dans lequel [télécharger les données](https://raw.githubusercontent.com/OceaneCsn/M1_Rmarkdown_course/master/data/burghardt_et_al_2015_expt1.csv) que nous allons utiliser aujourd'hui pour illustrer les fonctionnalités de Rmarkdown.
+Choisissez un emplacement et créez votre projet. A la racine du projet, créez un folder "data", dans lequel vous devez [télécharger les données](https://raw.githubusercontent.com/OceaneCsn/M1_Rmarkdown_course/master/data/burghardt_et_al_2015_expt1.csv) que nous allons utiliser aujourd'hui.
 
 + Créez un nouveau document Rmarkdown qui sera votre script de TP, via le menu File/New file/R Markdown (acceptez les éventuelles mises à jour). Laissez l'option HTML par défaut. Comme vous le constatez, RStudio propose déjà un petit template d'exemple fonctionnel de Rmarkdown. Vous pouvez le sauvegarder et le compiler avec le bouton Knit en haut de panel du script. Inspectez le résultat obtenu, ainsi que le code l'ayant généré.
 
-+ Personnalisez si nécessaire le template dans l'entête YAML (auteur, titre, date...). 
++ Personnalisez l'entête YAML (auteur, titre, date...). 
 
 + Le premier chunk de setup doit être conservé. Rajoutez-y l'import des packages que nous allons utiliser. Il doit donc maintenant contenir : 
 
@@ -292,16 +292,16 @@ Nous continuerons de le modifier plus tard dans l'énoncé. Exécutez ce chunk a
 
  La suite du template peut être supprimée.
 
-Au cours des étapes suivantes, utilisez régulièrement knitr pour compiler et visualiser le rendu du document. Vous pouvez également prendre l'habitude de copier le texte des questions de l'énoncé dans les parties markdown de votre rapport pour re-contextualiser le code contenu des chunks.
+Au cours des étapes suivantes, utilisez régulièrement Knit pour compiler et visualiser le rendu du document. Vous pouvez également prendre l'habitude de copier le texte des questions de l'énoncé dans les parties markdown de votre rapport pour re-contextualiser le code contenu des chunks.
 
 
 ### Donner le contexte et importer les données
 
-Créez une première section nommée "Contexte" (`# Contexte`) et rappelez l'objectif du document (vous familiariser avec Rmarkdown). Vous pouvez également parler des données que nous allons utiliser comme base de notre démonstration : Les données analysées sont issues d'un [publication](https://nph.onlinelibrary.wiley.com/doi/10.1111/nph.13799) intitulée "Fluctuating, warm temperatures decrease the effect of a key floral repressor on flowering time in Arabidopsis thaliana" de 2015.
+Créez une première section nommée "Contexte" (`# Contexte`) et rappelez l'objectif du document (vous familiariser avec Rmarkdown). Vous pouvez également parler des données que nous allons utiliser comme base de notre démonstration : Les données analysées sont issues d'une [publication](https://nph.onlinelibrary.wiley.com/doi/10.1111/nph.13799) intitulée "Fluctuating, warm temperatures decrease the effect of a key floral repressor on flowering time in Arabidopsis thaliana" de 2015.
 
 Dans ces données, plusieurs génotypes d'Arabidopsis thaliana, une plante modèle, ont été phénotypés (leurs caractéristiques morphologiques, leur réponse à l'environnement, ont été mesurés).
 
-Dans le premier chunk de votre document ( Ctrl + Alt + I, ou sous OS X: Cmd + Option + I), vous pouvez loader le jeu de données ainsi :
+Dans le premier chunk de votre document ( Créez un chunck avec Ctrl + Alt + I, ou sous OS X: Cmd + Option + I), vous pouvez loader le jeu de données ainsi :
 
 ```{r eval=FALSE}
 data <- read.csv("data/burghardt_et_al_2015_expt1.csv")
@@ -317,7 +317,8 @@ Après exécution, un objet data est apparu dans votre environnement RStudio. Vo
 
 ### Affichage `paged` des dataframes
 
-Pour améliorer le rendu dans dataframes comme en sortie de `head`, on va utiliser l'option d'affiche suivante dans la partie YAML comme dans cet exemple : 
+Pour améliorer le rendu des dataframes (comme ce que renvoie la fonction `head`, on va utiliser l'option d'affiche `paged` dans la partie YAML. Inspirez vous de cette entête : 
+
 ```{yaml}
 ---
 title: "Visualisation et analyse de données de biologie végétale"
@@ -327,7 +328,7 @@ output:
 ---
 ```
 
-Ajoutez l'option et re-compilez.
+Ajoutez l'option et re-compilez pour vérifier le résultat sur la sortie de `head`.
 
 
 
@@ -352,7 +353,7 @@ ggplot(data, aes(x = factor(temperature),
   xlab("Temperature")
 ```
 
-Exécutez le chunk, et compilez le document avec knitr.
+Exécutez le chunk, et compilez le document avec Knit.
 
 
 ### Changement de la taille d'une image
@@ -362,10 +363,12 @@ L'image est de taille assez petite. De manière globale à tout le document, dem
 
 Recompliez le document pour vérifier que le changement de taille a bien eu lieu.
 
+Vous pouvez aussi décrire le graphe et l’interpréter dans la partie markdown.
+
 
 ### Ajout des tests statistiques sur la visualisation
 
-On constate qu'une température plus élevée aura tendance à diminuer le temps nécessaire à la floraison. Il s'agit ici de reproduire le même graphe mais en se demandant si les durées jusqu'à floraison sont significativement impactées par la température. La fonction ```stat_compare_means``` du package ```ggpubr``` permet de rajouter un test de comparaison de moyennes (ici non paramétrique, le wilcox.test)
+On constate qu'une température plus élevée aura tendance à diminuer le temps nécessaire à la floraison. Il s'agit ici de reproduire le même graphe mais en se demandant si les durées jusqu'à floraison sont significativement impactées par la température. La fonction ```stat_compare_means``` du package ```ggpubr``` permet de rajouter un test de comparaison de moyennes (ici non paramétrique, le wilcox.test). Pour plus d'informations sur la fonctions, tapez `?stat_compare_means` dans la console.
 
 Créez une sous-section `## Visualisation avec tests statistiques`
 
@@ -404,9 +407,9 @@ ggplotly(ggplot(data, aes(x = days.to.flower,
 ```
 
 
-Vous remarqurez ici que la fonction `ggplotly` permet de rendre interactif le graphe ggplot.
+Vous remarquez ici que la fonction `ggplotly` permet de rendre interactif le graphe ggplot.
 
-On réalise la régression au moyen de la fonction `lm`, puis on extrait et on affiche en syntaxe latex de l'équation de ce modèle linéaire : 
+On réalise la régression au moyen de la fonction `lm`, puis on extrait et on affiche en syntaxe latex l'équation de ce modèle linéaire : 
 
 ```{r, eval=FALSE}
 lm <- lm(data = data, rosette.leaf.num~days.to.flower*day.length)
@@ -415,19 +418,19 @@ extract_eq(lm)
 
 Compilez pour admirer le rendu de l'équation.
 
-Vérifiez si le modèle linéaire semble correct et inter^rétable au moyen des graphes sur les résidus, puis affichez les résultats du modèle dans une table interactive : 
+Vérifiez si le modèle linéaire semble correct et interprétable au moyen des graphes sur les résidus (fonction `gglm`), puis affichez les résultats du modèle dans une table interactive (fonction `prettify`) : 
 
 ```{r, eval=FALSE}
 gglm(lm)
 prettify(summary(lm))
 ```
 
-Concluez sur les résultats du summary quant à l'effet du temps jusqu'à floraison et de la longueur du jour sur le nombre de feuilles (n'oubliez pas la signification du terme d’interaction).
+Concluez sur les résultats du summary quant à l'effet du temps jusqu'à floraison et de la longueur du jour sur le nombre de feuilles (n'oubliez pas la signification du terme d’interaction). Que nous apprend cette régression?
 
 
 ### Supression des messages et warnings
 
-Les données manquantes pour certaines observations et certaines fonctions génèrent des warnings lors de l'exécution du code. Pour qu'ils n'apparaissent pas dans le document, ajoutez un paramètre global dans le premier chunk spécifiant de ne pas rapporter les warnings ni les messages.
+Les données manquantes pour certaines observations et certaines fonctions génèrent des warnings lors de l'exécution du code. Pour qu'ils n'apparaissent pas dans le document final, ajoutez un paramètre global dans le premier chunk spécifiant de ne pas rapporter les warnings ni les messages.
 
 *Attention, ne faire ça qu'en fin d'édition, et lorsque l'on est sûr que ces messages et warnings ne sont pas problématiques, ni des informations importantes.*
 
@@ -435,7 +438,7 @@ Les données manquantes pour certaines observations et certaines fonctions gén�
 ### Personnaliser l'apparence du document
 
 
-Changez le `theme` du document dans l'entête YAML. Vous avez le choix entre les thèmes  “cerulean”, “cosmo”, “flatly”, “journal”, “lumen”, “paper”, “readable”, “sandstone”, “simplex”, “spacelab”, “united”, et “yeti”, dont un aperçu est disponible [ici](https://www.datadreaming.org/post/r-markdown-theme-gallery/).
+Changez le `theme` du document dans l'entête YAML. Vous avez le choix entre les thèmes  `cerulean`, `cosmo`, `flatly`, `journal`, `lumen`, `paper`, `readable`, `sandstone`, `simplex`, `spacelab`, `united`, et `yeti`, dont un aperçu est disponible [ici](https://www.datadreaming.org/post/r-markdown-theme-gallery/).
 Le thème de la coloration syntaxique du code R dans les chunks peut également être changé avec l'option `highlight`.
 
 
@@ -445,20 +448,27 @@ Le thème de la coloration syntaxique du code R dans les chunks peut également 
 
 Ajoutez une référence bibliographique pour référencer la publication relative aux données analysées. Vous pouvez procéder comme suit :
 
-+ Téléchargez le fichier contenant les informations de la référence (format .bib) à [cette adresse](https://raw.githubusercontent.com/OceaneCsn/M1_Rmarkdown_course/master/data/biblio.bib) et placez le dans le folder data du projet.
++ Téléchargez le [fichier contenant les informations de la référence](https://raw.githubusercontent.com/OceaneCsn/M1_Rmarkdown_course/master/data/biblio.bib) (format .bib) et placez le dans le folder data du projet.
 
 + Ajouter dans l'entête YAML un champs `bibliography: data/biblio.bib`
 Comme dans cet exemple:
 
-
+```{yaml}
+---
+title: "Visualisation et analyse de données de biologie végétale"
+output:
+  html_document:
+    theme: united
+bibliography: ./data/biblio.bib
+---
+```
 
 + Citez cette référence dans votre section contexte comme suit: `[@Burghardt2015]`.
 
-+ Ajoutez une dernière section `# Références` vide à la fin du document, car les références sont automatiquement ajoutées en fin de document
-Recompilez et pour vérifier que le résultat est comme attendu.
++ Ajoutez une dernière section `# Références` vide à la fin du document, car les références sont automatiquement ajoutées en fin de document.
+Recompilez et pour vérifier que la référence apparaît bien en fin de document, et qu'elle est bien référencée à l'endroit du contexte ou vous la citez.
 
-Plus de détails sur les  sont disponibles [ici](https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html). Ajoutez une section `# Références` vide à la fin du document, car les références sont automatiquement ajoutées en fin de document.
-
+Plus de détails sur les  sont disponibles [ici](https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html).
 
 ### Ajouter un footer
 
