@@ -1,6 +1,6 @@
 ---
 title: "L'IDE `RStudio` et l'édition de documents `Rmarkdown`"
-author: "Océane Cassan - oceane.cassan@cnrs.fr"
+author: "Océane Cassan - oceane.cassan@lirmm.fr"
 date: "08/31/2021"
 output:
   html_document:
@@ -231,7 +231,7 @@ Toutes les options de chunks sont décrites dans la [documentation de `Rmarkdown
 ## Partie pratique
 
 Maintenant, à vous de générer un rapport d'analyses.
-L'idée est de générer un rapport identique à [celui- ci](https://oceanecsn.github.io/M1_Rmarkdown_course/) pour illustrer les fonctionnalités de `Rmarkdown`.
+L'idée est de générer un rapport identique à [celui- ci](Solution.html) pour illustrer les fonctionnalités de `Rmarkdown`.
 
 Tout d'abord, nous aurons besoin de certains packages. 
 Assurez-vous de leur installation avant de commencer. Pou cela, dans la console R, exécutez la commande suivante qui fera les installations des packages manquants uniquement :
@@ -507,6 +507,6 @@ output:
 ---
 ```
 
-A la fin de ces guidelines, vous devriez avoir un document très proche de la [solution]((https://oceanecsn.github.io/M1_Rmarkdown_course/)!
+A la fin de ces guidelines, vous devriez avoir un document très proche de la [solution](Solution.html)!
 
 
